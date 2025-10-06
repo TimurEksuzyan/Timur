@@ -19,6 +19,12 @@ double getPerimetr(const double side1, const double side2);
 double getSquare(const double side1, const double side2);
 
 /**
+ * @brief perimetr - периметр треугольника
+ * @brief ploshad - площадь треугольника
+ */
+enum{perimetr,ploshad};
+
+/**
  * @brief считывает значение, 
  * введенное с клавиатуры с проверкой ввода
  * @return считанное значение
@@ -33,6 +39,8 @@ void checkValue(const double value);
 
 /**
  * @brief Точка входа в программу
+ * @param side1 первая сторона треугольника
+ * @param side2 вторая сторона треугольника
  * @return возвращает 0, если программма выполнена корректно
  */
 int main(void)
@@ -42,15 +50,27 @@ int main(void)
     checkValue(side1);
     double side2 = getValue();
     checkValue(side2);
-    printf("Периметр равен %.2lf",getPerimetr(side1, side2));
-    printf("Площадь равен %.2lf",getSquare(side1, side2));
+    printf("Выберите что хотите посчитать: %d - периметр, %d - площадь\n",perimetr,ploshad);
+    int choise = (int) getValue();
+    switch (choise)
+    {
+        case perimetr:
+            printf("Периметр равен %.21f\n",getPerimetr(side1,side2));
+            break;
+        case ploshad:
+            printf("Площадь равена %.21f\n",getSquare(side1,side2));
+            break;
+        default:
+            printf("Неверное значение");
+            abort();
+    }
 
     return 0;
 }
 
 double getPerimetr(const double side1, const double side2)
 {
-    return sqrt((side1 * side1) + (side2 * side2));
+    return sqrt((side1 * side1) + (side2 * side2))+(side1+side2);
 }
 
 double getSquare(const double side1, const double side2)
@@ -71,9 +91,9 @@ double getValue()
 
 void checkValue(const double value)
 {
-    if (value <= 0 )
+    if (value <= 0 + __DBL_EPSILON__)
     {
-        printf("Value have to be positive\n");
+        printf("Число должно быть положительным\n");
         abort();
     }
 }
