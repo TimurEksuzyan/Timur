@@ -4,14 +4,14 @@
 /**
  * @brief рассчитывает площадь грани куба
  * @param side ребро куба
- * @return возвращает рассчитанный Плоцадь
+ * @return возвращает рассчитанный Площадь
  */
 double getFaceArea(const double side);
 
 /**
  * @brief рассчитывает площадь полной поверхности куба
  * @param side ребро куба
- * @return возвращает рассчитанный Площадь
+ * @return возвращает рассчитанная Площадь
  */
 double getTotalSurfaceArea(const double side);
 
@@ -32,7 +32,7 @@ int main(void)
     printf("Ведите значение:");
     scanf("%lf",&side);
     printf("Сторона равна %.2lf\n", side);
-    printf("Площадь ребра равна %.2lf",getFaceArea(side));
+    printf("Площадь ребра равна %.2lf\n",getFaceArea(side));
     printf("Площадь полной поверхности равна %.2lf",getTotalSurfaceArea(side));
     printf("Объём равен %.2lf",getVolume(side));
     return 0;
@@ -53,3 +53,4 @@ double getVolume(const double side)
     return pow(side,3);
 
 }
+
