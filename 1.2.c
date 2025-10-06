@@ -29,6 +29,7 @@ double getVolume(const double side);
 int main(void)
 {
     double side;
+    printf("Ведите значение:");
     scanf("%lf",&side);
     printf("Сторона равна %.2lf\n", side);
     printf("Площадь ребра равна %.2lf",getFaceArea(side));
@@ -50,4 +51,5 @@ double getTotalSurfaceArea(const double side)
 double getVolume(const double side)
 {
     return pow(side,3);
+
 }
