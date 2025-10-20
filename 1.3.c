@@ -14,8 +14,8 @@ double GravityWeight(const double x);
 */
 int main()
 {
-    double x=0;
-    int value;
+    double x = 0;
+    int value = 0;
     printf("Введите массу мешка:");
     value = scanf("%lf",&x);
     if (value == 1)
@@ -23,10 +23,6 @@ int main()
         if (x > 0)
         {
             printf("Сила тяжести и вес мешка = %.2lf Н\n",GravityWeight(x));
-        }
-        else
-        {
-            printf("Неверное значение\n");
         }
     }
     else
@@ -39,3 +35,4 @@ double GravityWeight(const double x)
 {
     return x * 9.8;
 }
+
