@@ -32,7 +32,7 @@ double func(const double x)
 {
     const double a = 2.0;
     
-    if (x < 1.0 + DBL_EPSILON)
+    if (x <= 1.0 + DBL_EPSILON)
     {
         
         return 1.0;
@@ -59,4 +59,5 @@ double value()
         abort();
     }
     return value;
+
 }
