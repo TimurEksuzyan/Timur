@@ -48,7 +48,7 @@ double value()
     double value = 0;
     if (!scanf("%lf",&value))
     {
-        printf("Вы ввели неверное значение!\n");
+        printf("Error\n");
         abort();
     }
     return value;
@@ -64,4 +64,5 @@ void steps(const double step)
 double func(const double x)
 {
     return 0.29 * pow(x,3) + x - 1.2502;
+
 }
