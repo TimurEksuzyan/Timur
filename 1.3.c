@@ -1,11 +1,23 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 /*
 *@brief Расссчитывает силу тяжести и вес мешка
 *@param x масса мешка
 *@return возвращает рассчитанное значение силы тяжести и вес мешка
 */
 double GravityWeight(const double x);
+/**
+ * @brief считывает значение, 
+ * введенное с клавиатуры с проверкой ввода
+ * @return считанное значение
+ */
+double getValue();
+/**
+ * @brief проверяет,что переменная положительная
+ * @param value значение проверяемой переменной
+ */
+void checkValue(const double value);
 /*
 *@brief Точка входа в программу
 *@param x заданный пользователем значение массы мешка
@@ -14,25 +26,33 @@ double GravityWeight(const double x);
 */
 int main()
 {
-    double x = 0;
-    int value = 0;
     printf("Введите массу мешка:");
-    value = scanf("%lf",&x);
-    if (value == 1)
+    double x = getValue();
+    checkValue(x);
+    printf("Сила тяжести и вес мешка = %.2lf Н\n",GravityWeight(x));
+
+}
+
+double getValue()
+{
+    double value = 0;
+    if (!scanf("%lf",&value))
     {
-        if (x > 0)
-        {
-            printf("Сила тяжести и вес мешка = %.2lf Н\n",GravityWeight(x));
-        }
+        printf("Error\n");
+        abort();
     }
-    else
+    return value;
+}
+
+void checkValue(const double value)
+{
+    if (value <= 0 + __DBL_EPSILON__)
     {
-        return 1;
+        printf("Число должно быть положительным\n");
+        abort();
     }
-    return 0;
 }
 double GravityWeight(const double x)
 {
     return x * 9.8;
 }
-
