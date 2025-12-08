@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 #define scanf_s scanf
 
 /**
@@ -17,31 +18,38 @@ int Value();
 size_t getSize(char* message);
 
 /**
+ * @brief Выделение динамической памяти под массив
+ * @param size Размер массива
+ * @return Указатель на выделенную память
+ */
+int* allocateArray(const size_t size);
+
+/**
  * @brief Заполнение массива с клавиатуры
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void fillArray(int* arr,const size_t size);
+void fillArray(int* arr, const size_t size);
 
 /**
- * @brief Заполнение массива случайными числами в диапазоне [-15;15]
+ * @brief Заполнение массива случайными числами в указанном диапазоне
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void fillRandom(int* arr,const size_t size);
+void fillRandom(int* arr, const size_t size);
 
 /**
  * @brief Вывод массива на экран
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void printArray(const int* arr,const size_t size);
+void printArray(const int* arr, const size_t size);
 
 /**
  * @brief Нахождение произведения четных элементов массива
  * @param arr Указатель на массив
  * @param size Размер массива
- * @return Произведение четных элементов
+ * @return Произведение четных элементов или 0, если нет четных элементов
  */
 int PolElements(const int* arr, const size_t size);
 
@@ -50,31 +58,49 @@ int PolElements(const int* arr, const size_t size);
  * @param arr Указатель на массив
  * @param size Размер массива
  */
-void Odd(int* arr,const size_t size);
+void Odd(int* arr, const size_t size);
 
 /**
  * @brief Проверка наличия положительных элементов, делящихся на k с остатком 2
  * @param arr Указатель на массив
  * @param size Размер массива
  * @param k Делитель
- * @return 1 - если есть такие элементы, 0 - если нет
+ * @return true - если есть такие элементы, false - если нет
  */
-int Positive(const int* arr,const size_t size,const int k);
+bool Positive(const int* arr, const size_t size, const int k);
 
+/**
+ * @brief Выделение динамической памяти под массив целых чисел
+ * @param size Размер массива
+ * @return Указатель на выделенную память
+ */
+int* allocateArray(const size_t size)
+
+/**
+ * @brief RANDOM - заполнение массива случайными числами
+ * @brief MANUAL - заполнение массива вручную.
+ */
 enum {RANDOM = 1, MANUAL};
 
+/**
+ * @brief Точка входа в программу.
+ * @return 0, если программа выполнена корректно.
+ */
 int main()
 {
+    // Инициализация генератора случайных чисел
+    srand(time(NULL));
+    
     size_t size = getSize("Введите размер массива:");
-    int* arr = malloc(size * sizeof(int));
-    if (arr == NULL)
-    {
-        printf("Ошибка!");
-        exit(1);
-    }
+    
+    // Используем функцию для выделения памяти
+    int* arr = allocateArray(size);
+    
     printf("Выберите способ заполнения массива:\n"
-           "%d - случайными числами, %d - вручную:", RANDOM, MANUAL);
+           "%d - случайными числами\n"
+           "%d - вручную: ", RANDOM, MANUAL);
     int choice = Value();
+    
     switch(choice)
     {
         case RANDOM:
@@ -91,14 +117,25 @@ int main()
 
     printf("Исходный массив: ");
     printArray(arr, size);
+    
     int product = PolElements(arr, size);
+    
+    if (product != 0)
+    {
+        printf("   Результат произведения: %d\n", product);
+    }
+    
     Odd(arr, size);
+    
     printf("\n2. Массив после замены элементов с нечетными индексами: ");
     printArray(arr, size);
+    
     printf("\n3. Введите число k: ");
     int k = Value();
-    int result = Positive(arr, size, k);
-    if (result == 1)
+    
+    bool result = Positive(arr, size, k);
+    
+    if (result)
     {
         printf("Есть положительные элементы, делящиеся на %d с остатком 2\n", k);
     }
@@ -106,8 +143,20 @@ int main()
     {
         printf("Нет положительных элементов, делящихся на %d с остатком 2\n", k);
     }
+    
     free(arr);
     return 0;
+}
+
+int* allocateArray(const size_t size)
+{
+    int* arr = malloc(size * sizeof(int));
+    if (arr == NULL)
+    {
+        printf("Ошибка выделения памяти!\n");
+        exit(1);
+    }
+    return arr;
 }
 
 int Value()
@@ -115,7 +164,7 @@ int Value()
     int value = 0;
     if (!scanf_s("%d", &value))
     {
-        printf("Ошибка!\n");
+        printf("Ошибка ввода!\n");
         abort();
     }
     return value;
@@ -123,76 +172,101 @@ int Value()
 
 size_t getSize(char* message)
 {
-    printf("%s",message);
+    printf("%s", message);
     int value = Value();
     if (value <= 0)
     {
-        printf("Ошибка!\n");
+        printf("Ошибка: размер массива должен быть положительным!\n");
         abort();
     }
     return value;
 }
 
-void fillArray(int* arr,const size_t size)
+void fillArray(int* arr, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        printf("Введите элемент:");
+        printf("Введите элемент [%zu]: ", i);
         arr[i] = Value();
     }
 }
 
-void fillRandom(int* arr,const size_t size)
+void fillRandom(int* arr, const size_t size)
 {
+    printf("Введите минимальное значение диапазона: ");
+    int min = Value();
+    
+    printf("Введите максимальное значение диапазона: ");
+    int max = Value();
+    
+    if (min > max)
+    {
+        printf("Минимальное значение больше максимального! Меняю значения местами.\n");
+        int temp = min;
+        min = max;
+        max = temp;
+        printf("Новый диапазон: [%d, %d]\n", min, max);
+    }
+    
+    int range = max - min + 1;
+    
     for (size_t i = 0; i < size; i++)
     {
-        arr[i] = (rand() % 31) - 15;
+        arr[i] = (rand() % range) + min;
     }
+    
+    printf("Массив заполнен случайными числами в диапазоне [%d, %d]\n", min, max);
 }
 
-void printArray(const int* arr,const size_t size)
+void printArray(const int* arr, const size_t size)
 {
+    printf("[");
     for (size_t i = 0; i < size; i++)
     {
-        printf("%d ", arr[i]);
+        printf("%d", arr[i]);
+        if (i < size - 1)
+        {
+            printf(", ");
+        }
     }
-    printf("\n");
+    printf("]\n");
 }
 
 int PolElements(const int* arr, const size_t size)
 {
-    int product = 0;
-    int found = 0;
-    int i;
-    printf("Четные элементы массива: ");
-    for (i = 0; i < size; i++)
+    int product = 1;
+    bool found = false;
+    
+    printf("1. Четные элементы массива: ");
+    for (size_t i = 0; i < size; i++)
     {
         if (arr[i] % 2 == 0 && arr[i] != 0)
         {
             printf("%d ", arr[i]);
-            found = 1;
+            found = true;
         }
     }
 
-    if (found == 0)
+    if (!found)
     {
-        printf("Нет четных элементов");
-        abort();
+        printf("Нет четных элементов\n");
+        return 0;
     }
-    printf("\n");
-    printf("1. Произведение четных элементов:");
-    found = 0; 
-    for (i = 0; i < size; i++)
+    
+    printf("\n   Произведение четных элементов: ");
+    found = false;
+    
+    for (size_t i = 0; i < size; i++)
     {
         if (arr[i] % 2 == 0)
         {
-            if (found == 0) 
+            if (!found)
             {
                 printf("%d", arr[i]);
                 product = arr[i];
-                found = 1;
+                found = true;
             }
-            else 
+            else
             {
                 printf(" * %d", arr[i]);
                 product = product * arr[i];
@@ -201,10 +275,11 @@ int PolElements(const int* arr, const size_t size)
     }
 
     printf(" = %d\n", product);
+    
     return product;
 }
 
-void Odd(int* arr,const size_t size)
+void Odd(int* arr, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
@@ -215,7 +290,7 @@ void Odd(int* arr,const size_t size)
     }
 }
 
-int Positive(const int* arr,const size_t size,const int k)
+bool Positive(const int* arr, const size_t size, const int k)
 {
     if (k == 0)
     {
@@ -227,9 +302,9 @@ int Positive(const int* arr,const size_t size,const int k)
     {
         if (arr[i] > 0 && arr[i] % k == 2)
         {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
