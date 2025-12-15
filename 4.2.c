@@ -203,12 +203,7 @@ void fillRandom(int* arr, const size_t size)
 
 int* copyArray(const int* arr, const size_t size)
 {
-    int* copyArr = malloc(sizeof(int) * size);
-    if (copyArr == NULL)
-    {
-        printf("Ошибка!\n");
-        exit(1);
-    }
+    int* copyArr = allocateArray(size);
     for (size_t i = 0; i < size; i++)
     {
         copyArr[i] = arr[i];
@@ -258,12 +253,8 @@ int insertK(const int* copyArr, const size_t size)
         abort();
     }
     size_t newSize = size + 2 * count;
-    int* newArr = malloc(newSize * sizeof(int));
-    if (newArr == NULL)
-    {
-        printf("Ошибка!\n");
-        exit(1);
-    }
+    int* newArr = allocateArray(size);
+
     size_t j = 0;
     for (size_t i = 0; i < size; i++)
     {
@@ -284,7 +275,6 @@ int insertK(const int* copyArr, const size_t size)
     free(newArr);
     return 1;
 }
-
 int fromDtoA(const int* copyArr, const size_t size)
 {
     if (size == 0)
