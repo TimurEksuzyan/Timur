@@ -11,7 +11,7 @@ int Value(void);
  * @param message сообщение пользователю
  * @return Размер массива
  */
-size_t getSize(char* message);
+size_t getSize(const char* message);
 /**
  * @brief Заполнение массива с клавиатуры
  * @param arr Указатель на массив
@@ -148,7 +148,7 @@ int Value(void)
     return value;
 }
 
-size_t getSize(char* message)
+size_t getSize(const char* message)
 {
     printf("%s", message);
     int value = Value();
@@ -312,3 +312,4 @@ int fromDtoA(const int* copyArr, const size_t size)
     free(A);
     return 1;
 }
+
