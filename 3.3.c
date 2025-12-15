@@ -128,7 +128,7 @@ double getSumE(const double e, const double x)
 {
     double current = x;
     double sum = current;
-    for (int n = 0; sinFunc(current) > e; n++)
+    for (int n = 0; fabs(sinFunc(current)-sum) > e; n++)
     {
         current *= getRecurrent(n, x);
         sum += current;
@@ -136,3 +136,4 @@ double getSumE(const double e, const double x)
     return sum;
 
 }
+
