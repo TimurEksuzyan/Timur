@@ -15,7 +15,7 @@ int Value();
  * @param message сообщение пользователю
  * @return Размер массива
  */
-size_t getSize(char* message);
+size_t getSize(const char* message);
 
 /**
  * @brief Выделение динамической памяти под массив
@@ -155,7 +155,7 @@ int Value()
     return value;
 }
 
-size_t getSize(char* message)
+size_t getSize(const char* message)
 {
     printf("%s", message);
     int value = Value();
@@ -305,4 +305,5 @@ int Positive(const int* arr, const size_t size, const int k)
     {
         printf("Нет положительных элементов, делящихся на %d с остатком 2\n", k);
     }
+
 }
