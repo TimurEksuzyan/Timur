@@ -71,6 +71,14 @@ int insertK(const int* copyArr, const size_t size);
  * @return 1, если массив A успешно сформирован, 0 если не сформирован
  */
 int fromDtoA(const int* copyArr, const size_t size);
+
+/**
+ * @brief Выделение динамической памяти под массив целых чисел
+ * @param size Размер массива
+ * @return Указатель на выделенную память
+ */
+int* allocateArray(const size_t size);
+
 /**
  * @brief RANDOM - заполнение массива случайными числами
  * @brief MANUAL - заполнение массива вручную.
@@ -83,12 +91,7 @@ enum {RANDOM = 1, MANUAL};
 int main(void)
 {
     size_t size = getSize("Введите размер массива: ");
-    int* arr = malloc(size * sizeof(int));
-    if (arr == NULL)
-    {
-        printf("Ошибка!\n");
-        exit(1);
-    }
+    int* arr = allocateArray(size);
     printf("Выберите способ заполнения массива:\n"
            "%d - случайными числами\n"
            "%d - вручную\n"
@@ -121,6 +124,17 @@ int main(void)
     free(copyArr);
     free(arr);
     return 0;
+}
+
+int* allocateArray(const size_t size)
+{
+    int* arr = malloc(size * sizeof(int));
+    if (arr == NULL)
+    {
+        printf("Ошибка выделения памяти!\n");
+        exit(1);
+    }
+    return arr;
 }
 
 int Value(void)
