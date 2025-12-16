@@ -321,3 +321,4 @@ void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t colu
     }
 }
 
+
