@@ -7,11 +7,17 @@
  */
 int Value();
 /**
+ * @brief Выделяет память под массив указателей на строки
+ * @param rows Количество строк (указателей)
+ * @return Указатель на выделенную память
+ */
+int** allocateRowPointers(const size_t rows)
+/**
  * @brief Получение размера массива
  * @param message сообщение пользователю
  * @return Размер массива
  */
-size_t getSize(char* message);
+size_t getSize(const char* message);
 /**
  * @brief Заполнение массива с клавиатуры
  * @param arr Указатель на массив
@@ -133,7 +139,16 @@ int main()
     freeArray(arr, rows);
     return 0;
 }
-
+int** allocateRowPointers(const size_t rows)
+{
+    int** arr = malloc(rows * sizeof(int*));
+    if (arr == NULL)
+    {
+        printf("Ошибка выделения памяти под указатели строк.\n");
+        exit(1);
+    }
+    return arr;
+}
 int Value()
 {
     int value = 0;
@@ -145,7 +160,7 @@ int Value()
     return value;
 }
 
-size_t getSize(char* message)
+size_t getSize(const char* message)
 {
     printf("%s", message);
     int value = Value();
@@ -200,12 +215,8 @@ void fillRandom(int** arr, const size_t rows, const size_t columns)
 
 int** getArray(const size_t rows, const size_t columns)
 {
-    int** arr = malloc(rows * sizeof(int*));
-    if (arr == NULL)
-    {
-        printf("Ошибка выделения памяти.\n");
-        exit(1);
-    }
+    int** arr = allocateRowPointers(rows);
+    
     for (size_t i = 0; i < rows; i++)
     {
         arr[i] = malloc(columns * sizeof(int));
