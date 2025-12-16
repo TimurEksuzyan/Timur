@@ -7,11 +7,11 @@
  */
 int Value();
 /**
- * @brief Выделяет память под массив указателей на строки
- * @param rows Количество строк (указателей)
- * @return Указатель на выделенную память
+ * @brief Проверяет корректность выделения памяти для двумерного массива (матрицы).
+ * @return Функция не возвращает значение при успешной проверке.
+       При ошибке завершает выполнение программы.
  */
-int** allocateRowPointers(const size_t rows)
+void ckechPoint(int ** arr)
 /**
  * @brief Получение размера массива
  * @param message сообщение пользователю
@@ -139,15 +139,12 @@ int main()
     freeArray(arr, rows);
     return 0;
 }
-int** allocateRowPointers(const size_t rows)
+void ckechPoint(int ** arr)
 {
-    int** arr = malloc(rows * sizeof(int*));
     if (arr == NULL)
     {
         printf("Ошибка выделения памяти под указатели строк.\n");
         exit(1);
-    }
-    return arr;
 }
 int Value()
 {
@@ -174,7 +171,7 @@ size_t getSize(const char* message)
 
 void fillArray(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -187,7 +184,7 @@ void fillArray(int** arr, const size_t rows, const size_t columns)
 
 void printArray(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -201,7 +198,7 @@ void printArray(int** arr, const size_t rows, const size_t columns)
 
 void fillRandom(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     printf("Введите начало диапазона случайных чисел: ");
     int start = Value();
     printf("Введите конец диапазона случайных чисел: ");
@@ -218,7 +215,7 @@ void fillRandom(int** arr, const size_t rows, const size_t columns)
 
 int** getArray(const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     
     for (size_t i = 0; i < rows; i++)
     {
@@ -239,7 +236,7 @@ int** getArray(const size_t rows, const size_t columns)
 
 void freeArray(int** arr, const size_t rows)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     for (size_t i = 0; i < rows; i++)
     {
         free(arr[i]);
@@ -258,7 +255,7 @@ void checkRange(const int start, const int end)
 
 int** copyArray(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     int** copyArr = getArray(rows, columns);
     for (size_t i = 0; i < rows; i++)
     {
@@ -272,7 +269,7 @@ int** copyArray(int** arr, const size_t rows, const size_t columns)
 
 void replaceAbs(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+    ckechPoint(arr);
     for (size_t j = 0; j < columns; j++)
     {
         size_t minIndex = 0;
@@ -292,7 +289,7 @@ void replaceAbs(int** arr, const size_t rows, const size_t columns)
 
 size_t columnsToDelete(int** arr, const size_t rows, const size_t columns)
 {
-    int** arr = allocateRowPointers(rows);
+   ckechPoint(arr);
     size_t count = 0;
     for (size_t j = 0; j < columns; j++)
     {
@@ -306,7 +303,7 @@ size_t columnsToDelete(int** arr, const size_t rows, const size_t columns)
 
 void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t columns, const size_t newCols)
 {
-    int** arr = allocateRowPointers(rows);
+   ckechPoint(arr);
     size_t k = 0;
     for (size_t j = 0; j < columns; j++)
     {
@@ -320,5 +317,6 @@ void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t colu
         }
     }
 }
+
 
 
