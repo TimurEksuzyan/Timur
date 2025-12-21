@@ -1,23 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define scanf_s scanf
+
 /**
  * @brief Считывает значение, введенное с клавиатуры с проверкой ввода
  * @return Считанное значение
  */
 int Value();
+
 /**
  * @brief Проверяет корректность выделения памяти для двумерного массива (матрицы).
+ * @param arr Указатель на массив
  * @return Функция не возвращает значение при успешной проверке.
-       При ошибке завершает выполнение программы.
+ *         При ошибке завершает выполнение программы.
  */
-void ckechPoint(int ** arr)
+void checkPoint(int** arr);
+
 /**
  * @brief Получение размера массива
  * @param message сообщение пользователю
  * @return Размер массива
  */
 size_t getSize(const char* message);
+
 /**
  * @brief Заполнение массива с клавиатуры
  * @param arr Указатель на массив
@@ -25,6 +31,7 @@ size_t getSize(const char* message);
  * @param columns Количество столбцов массива
  */
 void fillArray(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Вывод массива на экран
  * @param arr Массив
@@ -32,6 +39,7 @@ void fillArray(int** arr, const size_t rows, const size_t columns);
  * @param columns Количество столбцов массива
  */
 void printArray(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Заполнение массива случайными числами
  * @param arr Массив
@@ -39,6 +47,7 @@ void printArray(int** arr, const size_t rows, const size_t columns);
  * @param columns Количество столбцов массива
  */
 void fillRandom(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Создаёт массив по указанным пользователем вводным данным
  * @param rows количество строк массива
@@ -46,18 +55,21 @@ void fillRandom(int** arr, const size_t rows, const size_t columns);
  * @return полученный массив
  */
 int** getArray(const size_t rows, const size_t columns);
+
 /**
  * @brief Освобождает память, выделенную под массив
  * @param arr массив
  * @param rows количество строк массива
  */
 void freeArray(int** arr, const size_t rows);
+
 /**
  * @brief Проверяет корректность диапазона случайных чисел
  * @param start Начало диапазона
  * @param end Конец диапазона
  */
 void checkRange(const int start, const int end);
+
 /**
  * @brief Создаёт копию массива
  * @param arr Исходный массив
@@ -66,6 +78,7 @@ void checkRange(const int start, const int end);
  * @return Полученный массив
  */
 int** copyArray(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Заменяет минимальный по модулю элемент каждого столбца нулём
  * @param arr Массив
@@ -73,6 +86,7 @@ int** copyArray(int** arr, const size_t rows, const size_t columns);
  * @param columns Количество столбцов массива
  */
 void replaceAbs(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Определяет, какие столбцы нужно удалить
  * @param arr Массив
@@ -81,6 +95,7 @@ void replaceAbs(int** arr, const size_t rows, const size_t columns);
  * @return Количество столбцов для удаления
  */
 size_t columnsToDelete(int** arr, const size_t rows, const size_t columns);
+
 /**
  * @brief Удаляет столбцы, в которых первый элемент больше последнего
  * @param arr Исходный массив
@@ -90,26 +105,33 @@ size_t columnsToDelete(int** arr, const size_t rows, const size_t columns);
  * @param newCols Количество столбцов после удаления
  */
 void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t columns, const size_t newCols);
+
 /**
  * @brief RANDOM - заполнение массива случайными числами
  * @brief MANUAL - заполнение массива вручную.
  */
 enum {RANDOM = 1, MANUAL};
+
 /**
  * @brief Точка входа в программу
  * @return 0, если программа выполнена корректно
  */
 int main()
 {
+    // Инициализация генератора случайных чисел
+    srand((unsigned int)time(NULL));
+    
     size_t rows = getSize("Введите количество строк массива: ");
     size_t columns = getSize("Введите количество столбцов массива: ");
     int** arr = getArray(rows, columns);
+    
     printf("Выберите способ заполнения массива:\n"
            "%d - случайными числами\n"
            "%d - вручную\n"
            "Введите нужный номер заполнения: ",
            RANDOM, MANUAL);
     int choice = Value();
+    
     switch (choice)
     {
         case RANDOM:
@@ -119,39 +141,57 @@ int main()
             fillArray(arr, rows, columns);
             break;
         default:
-            printf("Ошибка!\n");
+            printf("Ошибка! Неверный выбор.\n");
             freeArray(arr, rows);
-            break;
+            return 1;
     }
+    
     printf("Исходный массив:\n");
     printArray(arr, rows, columns);
+    
+    // Замена минимальных по модулю элементов нулями
     int** copyArr1 = copyArray(arr, rows, columns);
     replaceAbs(copyArr1, rows, columns);
     printf("Массив после замены минимальных по модулю элементов нулём:\n");
     printArray(copyArr1, rows, columns);
     freeArray(copyArr1, rows);
+    
+    // Удаление столбцов
     size_t newCols = columns - columnsToDelete(arr, rows, columns);
+    if (newCols == 0)
+    {
+        printf("Все столбцы были удалены!\n");
+        freeArray(arr, rows);
+        return 0;
+    }
+    
     int** copyArr2 = getArray(rows, newCols);
     deleteColumns(arr, copyArr2, rows, columns, newCols);
-    printf("Результат удаления столбцов:\n");
+    printf("Результат удаления столбцов (столбцы, где первый элемент > последнего):\n");
     printArray(copyArr2, rows, newCols);
+    
+    // Освобождение памяти
     freeArray(copyArr2, rows);
     freeArray(arr, rows);
+    
     return 0;
 }
-void ckechPoint(int ** arr)
+
+void checkPoint(int** arr)
 {
     if (arr == NULL)
     {
         printf("Ошибка выделения памяти под указатели строк.\n");
         exit(1);
+    }
 }
+
 int Value()
 {
     int value = 0;
     if (!scanf_s("%d", &value))
     {
-        printf("Ошибка!\n");
+        printf("Ошибка ввода!\n");
         abort();
     }
     return value;
@@ -163,7 +203,7 @@ size_t getSize(const char* message)
     int value = Value();
     if (value <= 0)
     {
-        printf("Ошибка!");
+        printf("Ошибка! Размер должен быть положительным числом.\n");
         abort();
     }
     return (size_t)value;
@@ -171,7 +211,7 @@ size_t getSize(const char* message)
 
 void fillArray(int** arr, const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    checkPoint(arr);
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -184,7 +224,7 @@ void fillArray(int** arr, const size_t rows, const size_t columns)
 
 void printArray(int** arr, const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    checkPoint(arr);
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = 0; j < columns; j++)
@@ -198,7 +238,7 @@ void printArray(int** arr, const size_t rows, const size_t columns)
 
 void fillRandom(int** arr, const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    checkPoint(arr);
     printf("Введите начало диапазона случайных чисел: ");
     int start = Value();
     printf("Введите конец диапазона случайных чисел: ");
@@ -215,14 +255,16 @@ void fillRandom(int** arr, const size_t rows, const size_t columns)
 
 int** getArray(const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    int** arr = malloc(rows * sizeof(int*));
+    checkPoint(arr);
     
     for (size_t i = 0; i < rows; i++)
     {
         arr[i] = malloc(columns * sizeof(int));
         if (arr[i] == NULL)
         {
-            printf("Ошибка выделения памяти.\n");
+            printf("Ошибка выделения памяти для строки %zu.\n", i);
+            // Освобождаем ранее выделенную память
             for (size_t j = 0; j < i; j++)
             {
                 free(arr[j]);
@@ -236,7 +278,8 @@ int** getArray(const size_t rows, const size_t columns)
 
 void freeArray(int** arr, const size_t rows)
 {
-    ckechPoint(arr);
+    if (arr == NULL) return;
+    
     for (size_t i = 0; i < rows; i++)
     {
         free(arr[i]);
@@ -255,7 +298,7 @@ void checkRange(const int start, const int end)
 
 int** copyArray(int** arr, const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    checkPoint(arr);
     int** copyArr = getArray(rows, columns);
     for (size_t i = 0; i < rows; i++)
     {
@@ -269,7 +312,7 @@ int** copyArray(int** arr, const size_t rows, const size_t columns)
 
 void replaceAbs(int** arr, const size_t rows, const size_t columns)
 {
-    ckechPoint(arr);
+    checkPoint(arr);
     for (size_t j = 0; j < columns; j++)
     {
         size_t minIndex = 0;
@@ -289,7 +332,7 @@ void replaceAbs(int** arr, const size_t rows, const size_t columns)
 
 size_t columnsToDelete(int** arr, const size_t rows, const size_t columns)
 {
-   ckechPoint(arr);
+    checkPoint(arr);
     size_t count = 0;
     for (size_t j = 0; j < columns; j++)
     {
@@ -303,7 +346,8 @@ size_t columnsToDelete(int** arr, const size_t rows, const size_t columns)
 
 void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t columns, const size_t newCols)
 {
-   ckechPoint(arr);
+    checkPoint(arr);
+    checkPoint(newArr);
     size_t k = 0;
     for (size_t j = 0; j < columns; j++)
     {
@@ -317,6 +361,3 @@ void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t colu
         }
     }
 }
-
-
-
