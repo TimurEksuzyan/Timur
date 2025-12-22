@@ -118,9 +118,6 @@ enum {RANDOM = 1, MANUAL};
  */
 int main()
 {
-    // Инициализация генератора случайных чисел
-    srand((unsigned int)time(NULL));
-    
     size_t rows = getSize("Введите количество строк массива: ");
     size_t columns = getSize("Введите количество столбцов массива: ");
     int** arr = getArray(rows, columns);
@@ -361,3 +358,4 @@ void deleteColumns(int** arr, int** newArr, const size_t rows, const size_t colu
         }
     }
 }
+
