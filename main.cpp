@@ -31,17 +31,13 @@ Point getPoint(const std::string& pointName)
 {
     double x, y;
     
-    std::cout << "Введите координаты точки " << pointName << std::endl;
+    std::cout << "Введите координаты точки " << pointName << ":" << std::endl;
     std::cout << "  x = ";
     std::cin >> x;
-    if (std::cin.fail()) {
-        std::cout << "Ошибка ввода!" << std::endl;
-        exit(1);
-    }
     std::cout << "  y = ";
     std::cin >> y;
     if (std::cin.fail()) {
-        std::cout << "Ошибка ввода!" << std::endl;
+        std::cout << "Ошибка ввода! Программа завершена." << std::endl;
         exit(1);
     }
     
