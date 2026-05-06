@@ -1,45 +1,63 @@
 #include <iostream>
-#include <string>     
-#include "tringle.h"  
+#include <string>
+#include "triangle.h"
 #include "point.h"
 
 /**
- * @brief Запрашивает у пользователя координаты точки
- * @param pointName - имя точки (например, "p1")
- * @return Point - введённая точка
+ * Считывает число с клавиатуры с проверкой ошибок
+ * @param prompt - текст приглашения
+ * @return double - введённое число
+ */
+double readDouble(const std::string& prompt);
+
+/**
+ * Запрашивает координаты точки и возвращает объект Point
+ * @param pointName - имя точки
+ * @return Point - созданная точка
  */
 Point getPoint(const std::string& pointName);
 
-/**
- * @brief Точка входа в программу
- * @return 0, если программа выполнена корректно
- */
 int main()
 {
+    std::cout << "=== Ввод координат треугольника ===" << std::endl;
+    
     Point p1 = getPoint("p1");
     Point p2 = getPoint("p2");
     Point p3 = getPoint("p3");
+    
+    std::cout << std::endl;
+    
     Triangle myTriangle(p1, p2, p3);
     Point H = myTriangle.getPointH();
-    std::cout << "Координаты точки H: X = " << H.getX() << ", Y = " << H.getY() << std::endl;
-    std::cout << "Площадь равна: " << myTriangle.getPlo() << std::endl;
+    
+    std::cout << "Результаты вычислений:" << std::endl;
+    std::cout << "  Координаты точки H:" << std::endl;
+    std::cout << "    X = " << H.getX() << std::endl;
+    std::cout << "    Y = " << H.getY() << std::endl;
+    std::cout << "  Площадь треугольника: " << myTriangle.getPlo() << std::endl;
     
     return 0;
 }
 
-Point getPoint(const std::string& pointName)
+double readDouble(const std::string& prompt)
 {
-    double x, y;
+    double value;
+    std::cout << prompt;
+    std::cin >> value;
     
-    std::cout << "Введите координаты точки " << pointName << ":" << std::endl;
-    std::cout << "  x = ";
-    std::cin >> x;
-    std::cout << "  y = ";
-    std::cin >> y;
-    if (std::cin.fail()) {
-        std::cout << "Ошибка ввода! Программа завершена." << std::endl;
+    if (std::cin.fail())
+    {
+        std::cout << "Ошибка! Введено неверное значение. Программа завершена." << std::endl;
         exit(1);
     }
     
+    return value;
+}
+
+Point getPoint(const std::string& pointName)
+{
+    std::cout << "Введите координаты точки " << pointName << ":" << std::endl;
+    double x = readDouble("  x = ");
+    double y = readDouble("  y = ");
     return Point(x, y);
 }
