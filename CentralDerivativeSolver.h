@@ -1,0 +1,11 @@
+#pragma once
+#include "Solver.h"
+
+/**
+ * @brief Класс для вычисления центральной разностной производной
+ */
+class CentralDerivativeSolver : public Solver
+{
+public:
+    double solve(const double x, const double unused, const double h, double (*f)(double)) const override;
+};
