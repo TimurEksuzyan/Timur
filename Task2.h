@@ -13,7 +13,7 @@ namespace miit::algebra
          * @brief Конструктор класса Task2
          * @param r Количество строк
          * @param c Количество столбцов
-         * @param gen указатель на генератор
+         * @param gen ссылка на генератор
          */
         Task2(const size_t r, const size_t c,const Generator& gen);
 
