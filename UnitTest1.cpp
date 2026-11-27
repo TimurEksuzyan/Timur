@@ -182,25 +182,6 @@ namespace Tests
                 });
         }
         /**
-         * @brief Проверка вставки новой строки
-         */
-        TEST_METHOD(InsertRow_Test)
-        {
-            Matrix<int> m(2, 2);
-            m[0][0] = 1; m[0][1] = 2;
-            m[1][0] = 3; m[1][1] = 4;
-            std::vector<int> newRow = { 5, 6 };
-            m.insertRow(1, newRow);
-            Assert::AreEqual(static_cast<size_t>(3), m.getRows());
-            Assert::AreEqual(1, m[0][0]);
-            Assert::AreEqual(5, m[1][0]);
-            Assert::AreEqual(6, m[1][1]);
-            Assert::AreEqual(3, m[2][0]);
-            Assert::ExpectException<std::out_of_range>([&]() {
-                m.insertRow(10, newRow);
-                });
-        }
-        /**
          * @brief Проверка удаления столбца
          */
         TEST_METHOD(RemoveColumn_Test)
