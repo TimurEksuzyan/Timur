@@ -11,7 +11,7 @@ namespace miit::algebra
 
     /**
      * @brief Шаблонный класс матрицы
-     * @param T Тип элементов матрицы
+     * @tparam T Тип элементов матрицы
      */
     template <typename T>
     class Matrix
@@ -23,7 +23,7 @@ namespace miit::algebra
 
     public:
         /**
-         * @brief Конструктор по умолчанию
+         * @brief Конструктор по умолчанию (создает пустую матрицу 0x0)
          */
         Matrix() : rows(0), cols(0) {}
 
@@ -43,24 +43,35 @@ namespace miit::algebra
 
         /**
          * @brief Конструктор копирования
+         * @param other Копируемая матрица
          */
         Matrix(const Matrix&) = default;
 
         /**
          * @brief Конструктор перемещения
+         * @param other Перемещаемая матрица
          */
         Matrix(Matrix&&) noexcept = default;
 
         /**
          * @brief Оператор присваивания копированием
+         * @param other Копируемая матрица
+         * @return Ссылка на текущую матрицу
          */
         Matrix& operator=(const Matrix&) = default;
 
         /**
          * @brief Оператор присваивания перемещением
+         * @param other Перемещаемая матрица
+         * @return Ссылка на текущую матрицу
          */
         Matrix& operator=(Matrix&&) noexcept = default;
 
+        /**
+         * @brief Оператор индексации строки (неконстантный)
+         * @param r Индекс строки
+         * @return Ссылка на вектор строки
+         */
         std::vector<T>& operator[](const size_t r)
         {
             if (r >= rows) {
@@ -69,7 +80,6 @@ namespace miit::algebra
             return data[r];
         }
 
-        
         /**
          * @brief Оператор индексации строки (константный)
          * @param r Индекс строки
@@ -83,21 +93,23 @@ namespace miit::algebra
             return data[r];
         }
 
-
         /**
          * @brief Получить количество строк матрицы
+         * @return Количество строк
          */
         size_t getRows() const { return rows; }
 
         /**
          * @brief Получить количество столбцов матрицы
+         * @return Количество столбцов
          */
         size_t getCols() const { return cols; }
 
         /**
          * @brief Заполнение матрицы с использованием ссылки на генератор
+         * @param generator Ссылка на объект генератора
          */
-        void fill(const Generator& generator)
+        void fill(Generator& generator)
         {
             for (size_t i = 0; i < rows; ++i) {
                 for (size_t j = 0; j < cols; ++j) {
@@ -107,9 +119,9 @@ namespace miit::algebra
         }
 
         /**
-        * @brief Метод вывода содержимого матрицы в строку
-        * @return Строковое представление матрицы
-        */
+         * @brief Метод вывода содержимого матрицы в строку
+         * @return Строковое представление матрицы
+         */
         std::string toString() const
         {
             std::ostringstream oss;
@@ -123,19 +135,9 @@ namespace miit::algebra
         }
 
         /**
-         * @brief Вставка новой строки в матрицу по указанному индексу
-         * @param index Индекс, по которому будет вставлена новая строка
-         * @param row Вектор элементов новой строки
+         * @brief Удаляет столбец матрицы по указанному индексу
+         * @param colIndex Индекс удаляемого столбца
          */
-        void insertRow(const size_t index, const std::vector<T>& row)
-        {
-            if (index > rows) {
-                throw std::out_of_range("Индекс вставки выходит за границы матрицы");
-            }
-            data.insert(data.begin() + index, row);
-            rows++;
-        }
-
         void removeColumn(const size_t colIndex)
         {
             if (colIndex >= cols) {
@@ -177,10 +179,11 @@ namespace miit::algebra
         }
 
         /**
-        * @brief Переопределение оператора сдвига вправо (ввод матрицы из потока)
-        * @param in Поток ввода
-        * @param matrix Матрица для ывода
-        */
+         * @brief Переопределение оператора сдвига вправо (ввод матрицы из потока)
+         * @param is Поток ввода
+         * @param matrix Матрица для заполнения
+         * @return Ссылка на поток ввода
+         */
         friend std::istream& operator>>(std::istream& is, Matrix<T>& matrix)
         {
             for (size_t i = 0; i < matrix.rows; ++i) {
