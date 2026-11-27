@@ -13,9 +13,9 @@ namespace miit::algebra
          * @brief Конструктор класса Task1
          * @param r Количество строк
          * @param c Количество столбцов
-         * @param gen Указатель на генератор
+         * @param gen Ссылка на генератор
          */
-        Task1(const size_t r, const size_t c,const Generator& gen);
+        Task1(const size_t r, const size_t c, Generator& gen);
 
         /**
          * @brief Выполняет замену минимального по модулю элемента каждого столбца нулем
