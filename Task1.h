@@ -15,7 +15,7 @@ namespace miit::algebra
          * @param c Количество столбцов
          * @param gen Ссылка на генератор
          */
-        Task1(const size_t r, const size_t c, Generator& gen);
+        Task1(const size_t r, const size_t c,const Generator& gen);
 
         /**
          * @brief Выполняет замену минимального по модулю элемента каждого столбца нулем
