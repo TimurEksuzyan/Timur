@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <memory>
 #include "RandomGenerator.h"
 #include "IStreamGenerator.h"
@@ -32,35 +32,28 @@ int main()
     int choiceInput = 0;
     std::cin >> choiceInput;
 
-    FillMethod choice = static_cast<FillMethod>(choiceInput);
-    Generator* generator = nullptr;
+    std::unique_ptr<Generator> generator;
 
-    RandomGenerator randomGen(0, 0);
-    IStreamGenerator streamGen(std::cin);
-    ConstGenerator constGen(0);
-
-    switch (choice) {
+    switch (choiceInput) {
     case FillMethod::RANDOM: {
         int min, max;
         std::cout << "Введите начало диапазона: ";
         std::cin >> min;
         std::cout << "Введите конец диапазона: ";
         std::cin >> max;
-        randomGen = RandomGenerator(min, max);
-        generator = &randomGen;
+        generator = std::make_unique<RandomGenerator>(min, max);
         break;
     }
     case FillMethod::MANUAL: {
         std::cout << "Введите элементы матрицы:\n";
-        generator = &streamGen;
+        generator = std::make_unique<IStreamGenerator>(std::cin);
         break;
     }
     case FillMethod::CONSTANT: {
         int val;
         std::cout << "Введите константное значение: ";
         std::cin >> val;
-        constGen = ConstGenerator(val);
-        generator = &constGen;
+        generator = std::make_unique<ConstGenerator>(val);
         break;
     }
     default: {
@@ -76,7 +69,7 @@ int main()
     std::cout << "Результат задачи 1 (Заменить минимальный по модулю элемент столбца нулем):\n" << task1.getMatrix();
 
     std::cout << "\n ЗАДАЧА 2 \n";
-    if (choice == FillMethod::MANUAL) {
+    if (choiceInput == FillMethod::MANUAL) {
         std::cout << "Введите элементы матрицы еще раз для задачи 2:\n";
     }
 
